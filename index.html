@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>デザイアカードジェネレーター</title>
+  <style>
+    /* フォント読み込み（TTF形式） */
+    @font-face {
+      font-family: 'KaizouNextUPB';
+      src: url('KaizouNextUPB.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+    body {
+      font-family: sans-serif;
+      margin: 20px;
+    }
+    .controls {
+      max-width: 600px;
+      margin-bottom: 20px;
+    }
+    .controls label {
+      display: block;
+      margin-top: 8px;
+      font-weight: bold;
+    }
+    .controls input, .controls textarea {
+      width: 100%;
+      padding: 6px;
+      box-sizing: border-box;
+      margin-top: 4px;
+      font-size: 14px;
+    }
+    .controls .checkbox-wrapper {
+      display: flex;
+      align-items: center;
+      margin-top: 10px;
+    }
+    .controls .checkbox-wrapper input {
+      width: auto;
+      margin-right: 6px;
+    }
+    button {
+      margin-top: 10px;
+      padding: 6px 12px;
+      font-size: 16px;
+    }
+    canvas {
+      border: 1px solid #ccc;
+      display: block;
+      margin-top: 20px;
+      max-width: 100%;
+      height: auto;
+    }
+    footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 0.9em;
+    }
+    /* リンクの色を青にし、下線を引く */
+    footer a {
+      color: blue;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h1>デザイアカードジェネレーター</h1>
+  <p>
+    ・「デザイアカードに書き込みたい願い」を自動改行して描画し、  
+      その右下に名前テキストを配置します。<br>
+    ・2つのテキスト全体が画像中央に自動配置されます。<br>
+    ・各テキストのフォントサイズ・位置オフセットは個別に調整可能です。<br>
+    ・「Doneのハンコを押す」を選択すると、テキストの上から背景画像の中央部分にハンコが押された状態の画像を出力します。<br>
+    ・入力変更はリアルタイムに反映、画像はPNG形式で保存できます。
+  </p>
+  
+  <div class="controls">
+    <label for="mainText">デザイアカードに書き込みたい願い</label>
+    <textarea id="mainText" placeholder="デザイアカードに書き込みたい願いを入力"></textarea>
+    
+    <label for="mainFontSize">デザイアカードに書き込みたい願い フォントサイズ(px)</label>
+    <input type="number" id="mainFontSize" value="40" />
+    
+    <label for="mainMaxWidth">デザイアカードに書き込みたい願い 最大幅(px)</label>
+    <input type="number" id="mainMaxWidth" value="600" />
+    
+    <label for="mainOffsetX">デザイアカードに書き込みたい願い Xオフセット</label>
+    <input type="number" id="mainOffsetX" value="0" />
+    
+    <label for="mainOffsetY">デザイアカードに書き込みたい願い Yオフセット</label>
+    <input type="number" id="mainOffsetY" value="0" />
+    
+    <hr>
+    
+    <label for="nameText">名前（サイン）</label>
+    <input type="text" id="nameText" placeholder="名前やサインを入力" />
+    
+    <label for="nameFontSize">名前 テキスト フォントサイズ(px)</label>
+    <input type="number" id="nameFontSize" value="30" />
+    
+    <label for="nameOffsetX">名前 テキスト Xオフセット</label>
+    <input type="number" id="nameOffsetX" value="10" />
+    
+    <label for="nameOffsetY">名前 テキスト Yオフセット</label>
+    <input type="number" id="nameOffsetY" value="10" />
+    
+    <div class="checkbox-wrapper">
+      <input type="checkbox" id="overlayCheckbox">
+      <label for="overlayCheckbox">Doneのハンコを押す</label>
+    </div>
+    
+    <button id="saveBtn">画像を保存</button>
+  </div>
+  
+  <canvas id="canvas"></canvas>
+  
+  <!-- フッター -->
+  <footer>
+    Special Thanks 素材は「<a href="https://x.com/The_Fool_8319?" target="_blank" rel="noopener noreferrer">サンジェルマン</a>」様 と 「<a href="https://x.com/_gaL_hikigaeru" target="_blank" rel="noopener noreferrer">－gaL</a>」様 の物を使用させていただきました。
+  </footer>
+  
+  <script>
+    // ======== 画像・キャンバス準備 ========
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    
+    // 背景画像
+    const bgImage = new Image();
+    bgImage.src = 'Desire.png'; // 同一ディレクトリに配置
+    bgImage.onload = () => {
+      canvas.width = bgImage.width;
+      canvas.height = bgImage.height;
+      draw();
+    };
+    
+    // オーバーレイ画像（Done.png）
+    const overlayImage = new Image();
+    overlayImage.src = 'Done.png';
+    
+    // ======== 入力要素の取得 ========
+    const mainTextEl      = document.getElementById('mainText');
+    const mainFontSizeEl  = document.getElementById('mainFontSize');
+    const mainMaxWidthEl  = document.getElementById('mainMaxWidth');
+    const mainOffsetXEl   = document.getElementById('mainOffsetX');
+    const mainOffsetYEl   = document.getElementById('mainOffsetY');
+    
+    const nameTextEl      = document.getElementById('nameText');
+    const nameFontSizeEl  = document.getElementById('nameFontSize');
+    const nameOffsetXEl   = document.getElementById('nameOffsetX');
+    const nameOffsetYEl   = document.getElementById('nameOffsetY');
+    
+    const overlayCheckbox = document.getElementById('overlayCheckbox');
+    const saveBtn         = document.getElementById('saveBtn');
+    
+    // ======== テキスト改行処理とサイズ計測 ========
+    function measureWrapText(ctx, text, maxWidth, fontSize) {
+      const lines = [];
+      const paragraphs = text.split('\n');
+      
+      paragraphs.forEach(paragraph => {
+        const words = paragraph.split(' ');
+        let line = '';
+        words.forEach(word => {
+          const testLine = line + word + ' ';
+          const metrics = ctx.measureText(testLine);
+          if (metrics.width > maxWidth && line !== '') {
+            lines.push(line.trim());
+            line = word + ' ';
+          } else {
+            line = testLine;
+          }
+        });
+        lines.push(line.trim());
+      });
+      
+      const lineHeight = fontSize * 1.2;
+      let textBlockWidth = 0;
+      lines.forEach(line => {
+        const w = ctx.measureText(line).width;
+        if (w > textBlockWidth) textBlockWidth = w;
+      });
+      
+      const textBlockHeight = lines.length * lineHeight;
+      return { lines, textBlockWidth, textBlockHeight, lineHeight };
+    }
+    
+    // ======== 描画処理 ========
+    function draw() {
+      // 背景画像描画
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(bgImage, 0, 0);
+      
+      // ----- メインテキスト描画準備 -----
+      const mainText = mainTextEl.value;
+      const mainFontSize = parseInt(mainFontSizeEl.value, 10) || 40;
+      const mainMaxWidth = parseInt(mainMaxWidthEl.value, 10) || 600;
+      const mainOffsetX = parseInt(mainOffsetXEl.value, 10) || 0;
+      const mainOffsetY = parseInt(mainOffsetYEl.value, 10) || 0;
+      
+      ctx.font = `${mainFontSize}px "KaizouNextUPB", sans-serif`;
+      ctx.fillStyle = 'black';
+      ctx.textBaseline = 'top';
+      ctx.textAlign = 'left';
+      
+      const {
+        lines: mainLines,
+        textBlockWidth,
+        textBlockHeight,
+        lineHeight
+      } = measureWrapText(ctx, mainText, mainMaxWidth, mainFontSize);
+      
+      // メインテキストの仮のボックス（左上はオフセット付き）
+      const mainBox = {
+        x: mainOffsetX,
+        y: mainOffsetY,
+        width: textBlockWidth,
+        height: textBlockHeight,
+        lines: mainLines,
+        lineHeight: lineHeight
+      };
+      
+      // ----- 名前テキスト描画準備 -----
+      const nameText = nameTextEl.value.trim();
+      const nameFontSize = parseInt(nameFontSizeEl.value, 10) || 30;
+      const nameOffsetX = parseInt(nameOffsetXEl.value, 10) || 0;
+      const nameOffsetY = parseInt(nameOffsetYEl.value, 10) || 0;
+      
+      let nameBox = null;
+      if (nameText) {
+        ctx.font = `${nameFontSize}px "KaizouNextUPB", sans-serif`;
+        const nameWidth = ctx.measureText(nameText).width;
+        const nameHeight = nameFontSize; // 単一行分と仮定
+        // 名前はメインテキストの右下 + オフセットに配置
+        const nx = mainBox.x + mainBox.width + nameOffsetX;
+        const ny = mainBox.y + mainBox.height + nameOffsetY;
+        nameBox = {
+          text: nameText,
+          x: nx,
+          y: ny,
+          width: nameWidth,
+          height: nameHeight,
+          fontSize: nameFontSize
+        };
+      }
+      
+      // ----- 全体のバウンディングボックスを計算 -----
+      let minX = mainBox.x;
+      let minY = mainBox.y;
+      let maxX = mainBox.x + mainBox.width;
+      let maxY = mainBox.y + mainBox.height;
+      if (nameBox) {
+        if (nameBox.x < minX) minX = nameBox.x;
+        if (nameBox.y < minY) minY = nameBox.y;
+        const nameRight = nameBox.x + nameBox.width;
+        const nameBottom = nameBox.y + nameBox.height;
+        if (nameRight > maxX) maxX = nameRight;
+        if (nameBottom > maxY) maxY = nameBottom;
+      }
+      const entireWidth = maxX - minX;
+      const entireHeight = maxY - minY;
+      
+      // 画像中央に全体を配置するためのオフセット
+      const centerOffsetX = (canvas.width - entireWidth) / 2 - minX;
+      const centerOffsetY = (canvas.height - entireHeight) / 2 - minY;
+      
+      // ----- 実際の描画 -----
+      // メインテキスト
+      ctx.font = `${mainFontSize}px "KaizouNextUPB", sans-serif`;
+      ctx.fillStyle = 'black';
+      ctx.textBaseline = 'top';
+      ctx.textAlign = 'left';
+      let currentY = mainBox.y + centerOffsetY;
+      mainBox.lines.forEach(line => {
+        const x = mainBox.x + centerOffsetX;
+        ctx.fillText(line, x, currentY);
+        currentY += mainBox.lineHeight;
+      });
+      
+      // 名前テキスト
+      if (nameBox) {
+        ctx.font = `${nameBox.fontSize}px "KaizouNextUPB", sans-serif`;
+        ctx.textBaseline = 'top';
+        ctx.textAlign = 'left';
+        ctx.fillText(nameBox.text, nameBox.x + centerOffsetX, nameBox.y + centerOffsetY);
+      }
+      
+      // ----- オーバーレイ画像（Done.png）を描画 -----
+      if (overlayCheckbox.checked && overlayImage.complete) {
+        // 画像を縮小して描画する (例: 60%に縮小)
+        const overlayScale = 0.6;
+        const scaledWidth = overlayImage.width * overlayScale;
+        const scaledHeight = overlayImage.height * overlayScale;
+        
+        // キャンバス中央に配置
+        const overlayX = (canvas.width - scaledWidth) / 2;
+        const overlayY = (canvas.height - scaledHeight) / 2;
+        
+        ctx.drawImage(overlayImage, overlayX, overlayY, scaledWidth, scaledHeight);
+      }
+    }
+    
+    // ======== リアルタイム反映 ========
+    [
+      mainTextEl, mainFontSizeEl, mainMaxWidthEl, mainOffsetXEl, mainOffsetYEl,
+      nameTextEl, nameFontSizeEl, nameOffsetXEl, nameOffsetYEl, overlayCheckbox
+    ].forEach(el => {
+      el.addEventListener('input', draw);
+      el.addEventListener('change', draw);
+    });
+    
+    // ======== 画像保存 ========
+    saveBtn.addEventListener('click', () => {
+      const link = document.createElement('a');
+      link.download = 'Desire.png';
+      link.href = canvas.toDataURL();
+      link.click();
+    });
+  </script>
+</body>
+</html>
