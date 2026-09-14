@@ -27,12 +27,12 @@ const refs = {
 
 const defaults = {
   mainText: "",
-  mainFontSize: 40,
+  mainFontSize: 80,
   mainMaxWidth: 600,
   mainOffsetX: 0,
   mainOffsetY: 0,
   nameText: "",
-  nameFontSize: 30,
+  nameFontSize: 48,
   nameOffsetX: 10,
   nameOffsetY: 10,
   overlayCheckbox: false,
