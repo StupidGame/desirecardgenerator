@@ -309,7 +309,7 @@ body::before {
 
 .hero-device { position: relative; display: grid; width: 252px; height: 252px; place-items: center; overflow: hidden; border: 1px solid #313b46; border-radius: 12px; background: #11151b; box-shadow: 14px 15px 0 #dd4035; }
 .hero-device::before { position: absolute; inset: 0; background: linear-gradient(135deg, transparent 49.5%, rgba(255, 255, 255, 0.08) 50%, transparent 50.5%), linear-gradient(45deg, transparent 49.5%, rgba(255, 255, 255, 0.05) 50%, transparent 50.5%); background-size: 56px 56px; content: ""; opacity: 0.7; }
-.hero-device::after { position: absolute; top: 0; right: 28px; width: 4px; height: 82px; background: #f1b84e; content: ""; transform: skew(-13deg); }
+.hero-device::after { display: none; }
 .device-corner { position: absolute; top: 20px; right: 20px; z-index: 1; color: #9ba4ac; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 9px; font-weight: 800; letter-spacing: 0.12em; text-align: right; white-space: nowrap; }
 .id-core-orb { position: relative; z-index: 1; display: grid; width: 146px; height: 146px; place-items: center; color: #14181e; }
 .id-core-orb::before { position: absolute; top: 50%; left: 50%; width: 112px; height: 112px; border: 2px solid #f5f1e8; outline: 1px solid rgba(245, 241, 232, 0.42); outline-offset: 8px; background: linear-gradient(145deg, #fffdf7, #9da6ad); box-shadow: 0 0 0 13px rgba(255, 255, 255, 0.04), 0 0 35px rgba(149, 237, 240, 0.18); content: ""; transform: translate(-50%, -50%) rotate(45deg); }
