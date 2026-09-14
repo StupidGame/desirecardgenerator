@@ -381,3 +381,10 @@ body::before {
   .editor-panel, .preview-panel { box-shadow: 5px 5px 0 rgba(17, 21, 27, 0.15); }
   .preview-panel { box-shadow: 5px 5px 0 rgba(221, 64, 53, 0.85); }
 }
+
+/* Keep the player-ID HUD stable even when an older cached rule is present. */
+.hero-device {
+  clip-path: none !important;
+  transform: none !important;
+  border-radius: 12px !important;
+}
