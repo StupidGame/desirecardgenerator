@@ -12,32 +12,37 @@
     <div class="page-shell">
       <header class="site-header">
         <a class="brand" href="./" aria-label="デザイアカードジェネレーター トップ">
-          <span class="brand-mark" aria-hidden="true">✦</span>
+          <span class="brand-mark" aria-hidden="true">◈</span>
           <span>
-            <span class="brand-name">DESIRE CARD</span>
-            <span class="brand-subtitle">GENERATOR</span>
+            <span class="brand-name">DESIRE GRAND PRIX</span>
+            <span class="brand-subtitle">WISH REGISTRATION TERMINAL</span>
           </span>
         </a>
-        <div class="header-note"><span class="header-dot" aria-hidden="true"></span>ブラウザ上で完結</div>
+        <div class="header-note"><span class="header-dot" aria-hidden="true"></span>PLAYER 01 / ONLINE</div>
       </header>
 
       <main>
         <section class="hero" aria-labelledby="page-title">
-          <p class="eyebrow">MAKE YOUR WISH VISIBLE</p>
-          <h1 id="page-title">願いを、カードに。</h1>
-          <p class="hero-copy">デザイアカードに書き込みたい言葉と名前を入力するだけ。<br />プレビューを見ながら、あなただけの一枚を作れます。</p>
+          <p class="eyebrow">DGP / WISH REGISTRATION</p>
+          <h1 id="page-title">あなたの願いを、<br />登録せよ。</h1>
+          <p class="hero-copy">願いを入力して、あなただけのデザイアカードを生成。<br />エントリーフォームを起動し、理想の世界への一枚を仕上げよう。</p>
+          <div class="status-strip" aria-label="ゲームステータス">
+            <div class="status-item"><span>STAGE</span><strong>01</strong></div>
+            <div class="status-item"><span>ID CORE</span><strong class="status-ready">READY</strong></div>
+            <div class="status-item"><span>MISSION</span><strong>WISH</strong></div>
+          </div>
         </section>
 
         <div class="workspace">
           <section class="panel editor-panel" aria-labelledby="editor-title">
             <div class="panel-heading">
-              <div><p class="section-kicker">01 / EDIT</p><h2 id="editor-title">カードを編集</h2></div>
-              <span class="live-badge"><span></span> LIVE PREVIEW</span>
+              <div><p class="section-kicker">01 / ENTRY FORM</p><h2 id="editor-title">願いをセット</h2></div>
+              <span class="live-badge"><span></span> ID CORE READY</span>
             </div>
 
             <div class="editor-form">
               <fieldset class="control-group">
-                <legend>メインテキスト</legend>
+                <legend>DESIRE / メインテキスト</legend>
                 <label class="field-label" for="mainText">カードに書き込みたい願い</label>
                 <textarea id="mainText" rows="3" maxlength="120" placeholder="例：世界が平和になりますように"></textarea>
                 <div class="field-meta"><span>改行にも対応しています</span><span id="mainTextCount">0 / 120</span></div>
@@ -52,7 +57,7 @@
               </fieldset>
 
               <fieldset class="control-group">
-                <legend>テキストの調整</legend>
+                <legend>PARAMETER / テキストの調整</legend>
                 <div class="control-grid control-grid--two">
                   <div><label class="field-label" for="mainFontSize">フォントサイズ</label><div class="input-with-unit"><input id="mainFontSize" type="number" min="12" max="160" value="40" inputmode="numeric" /><span>px</span></div></div>
                   <div><label class="field-label" for="mainMaxWidth">最大幅</label><div class="input-with-unit"><input id="mainMaxWidth" type="number" min="100" max="1400" value="600" inputmode="numeric" /><span>px</span></div></div>
@@ -64,7 +69,7 @@
               </fieldset>
 
               <fieldset class="control-group">
-                <legend>名前・サイン</legend>
+                <legend>PLAYER ID / 名前・サイン</legend>
                 <label class="field-label" for="nameText">名前やサイン（任意）</label>
                 <input id="nameText" type="text" maxlength="40" placeholder="例：あなたの名前" />
                 <div class="control-grid control-grid--three offset-fields">
@@ -75,7 +80,7 @@
               </fieldset>
 
               <fieldset class="control-group options-group">
-                <legend>仕上げ</legend>
+                <legend>FINAL CHECK / 仕上げ</legend>
                 <label class="check-card" for="overlayCheckbox">
                   <span class="check-icon" aria-hidden="true">✓</span>
                   <span class="check-copy"><strong>Doneのハンコを押す</strong><small>完成したカードに赤いスタンプを重ねます</small></span>
@@ -93,18 +98,19 @@
 
           <section class="panel preview-panel" aria-labelledby="preview-title">
             <div class="panel-heading preview-heading">
-              <div><p class="section-kicker">02 / PREVIEW</p><h2 id="preview-title">完成イメージ</h2></div>
-              <span class="preview-size">1600 × 1200</span>
+              <div><p class="section-kicker">02 / GAME SCREEN</p><h2 id="preview-title">完成イメージ</h2></div>
+              <span class="preview-size">STAGE 01 · 1600 × 1200</span>
             </div>
             <div class="canvas-frame"><canvas id="canvas" aria-label="デザイアカードのプレビュー"></canvas><div class="canvas-loading" id="canvasLoading">プレビューを準備中…</div></div>
-            <p class="preview-hint">入力内容はリアルタイムで反映されます</p>
+            <p class="preview-hint"><span aria-hidden="true">◆</span> 入力内容はリアルタイムで反映されます</p>
           </section>
         </div>
       </main>
 
       <footer class="site-footer">
         <div><span class="footer-label">SPECIAL THANKS</span><span>素材提供：</span> <a href="https://x.com/The_Fool_8319" target="_blank" rel="noopener noreferrer">サンジェルマン</a><span> / </span><a href="https://x.com/_gaL_hikigaeru" target="_blank" rel="noopener noreferrer">・紅aL</a></div>
-        <span class="footer-credit">DESIRE CARD GENERATOR</span>
+        <div class="footer-legal">FAN-MADE UI / NOT OFFICIAL</div>
+        <span class="footer-credit">WISH TERMINAL</span>
       </footer>
     </div>
   </body>
