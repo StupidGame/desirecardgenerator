@@ -172,6 +172,7 @@ function saveImage() {
     link.href = url;
     link.click();
     URL.revokeObjectURL(url);
+    refs.assetStatus.textContent = "PNGを保存しました";
   }, "image/png");
 }
 
@@ -197,7 +198,7 @@ refs.saveBtn.addEventListener("click", saveImage);
 
 bgImage.addEventListener("load", () => {
   draw();
-  setReadyState(true, "準備完了。入力内容は自動で反映されます");
+  setReadyState(true, "準備完了");
 });
 
 bgImage.addEventListener("error", () => setReadyState(false, "背景画像を読み込めませんでした"));
@@ -207,4 +208,4 @@ overlayImage.addEventListener("error", () => { refs.assetStatus.textContent = "�
 if (document.fonts?.ready) document.fonts.ready.then(draw);
 
 updateCount();
-setReadyState(false, "画像を読み込んでいます…");
+setReadyState(false, "カードを読み込んでいます…");

@@ -1,126 +1,128 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="好きな言葉と名前を入力して、デザイアカードをかんたんに作成できる無料ジェネレーター。" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="願いとサインを入れて、自分だけのデザイアカードを作れるファンメイドジェネレーター。">
     <title>デザイアカードジェネレーター</title>
-    <link rel="stylesheet" href="./styles.css?v=4" />
-    <script src="./script.js?v=4" defer></script>
+    <link rel="stylesheet" href="./styles.css?v=5">
+    <script src="./script.js?v=5" defer></script>
   </head>
   <body>
     <div class="page-shell">
       <header class="site-header">
         <a class="brand" href="./" aria-label="デザイアカードジェネレーター トップ">
-          <span class="brand-mark" aria-hidden="true">◈</span>
-          <span>
+          <span class="brand-mark" aria-hidden="true">DGP</span>
+          <span class="brand-copy">
             <span class="brand-name">DESIRE GRAND PRIX</span>
-            <span class="brand-subtitle">WISH REGISTRATION TERMINAL</span>
+            <span class="brand-subtitle">DESIRE CARD MAKER</span>
           </span>
         </a>
-        <div class="header-note"><span class="header-dot" aria-hidden="true"></span>PLAYER 01 / ONLINE</div>
+        <p class="header-note"><span aria-hidden="true"></span>UNOFFICIAL FAN TOOL</p>
       </header>
 
       <main>
         <section class="hero" aria-labelledby="page-title">
-          <div class="hero-topline"><span>DGP NETWORK / SECURE LINE</span><span>SEASON 01 — WISH REGISTRATION</span></div>
-          <div class="hero-grid">
-            <div class="hero-copy-block">
-              <p class="eyebrow">DESIRE CARD / ID CORE REGISTRATION</p>
-              <h1 id="page-title">あなたの願いを、<br /><em>エントリー</em>せよ。</h1>
-              <p class="hero-copy">願いを入力して、あなただけのデザイアカードを生成。<br />エントリーフォームを起動し、理想の世界への一枚を仕上げよう。</p>
-            </div>
-            <div class="hero-device" aria-label="プレイヤーIDコアの状態" role="img">
-              <span class="device-corner device-corner--top">PLAYER ID / 001</span>
-              <div class="id-core-orb"><span>01</span><small>ID CORE</small></div>
-              <div class="device-footer"><span>DRIVER LINK</span><strong>ACTIVE</strong><b>ENTRY</b></div>
-            </div>
+          <span class="hero-index" aria-hidden="true">DGP</span>
+          <div class="hero-copy-block">
+            <p class="eyebrow">DESIRE GRAND PRIX / ENTRY</p>
+            <h1 id="page-title">おめでとう<br><em>ございます。</em></h1>
+            <p class="hero-copy">デザイアカードに、叶えたい理想の世界を記入してください。</p>
           </div>
-          <div class="status-strip" aria-label="ゲームステータス">
-            <div class="status-item"><span>STAGE</span><strong>01</strong></div>
-            <div class="status-item"><span>ID CORE</span><strong class="status-ready">READY</strong></div>
-            <div class="status-item"><span>MISSION</span><strong>WISH</strong></div>
+          <div class="hero-card" aria-hidden="true">
+            <span>DESIRE</span>
+            <small>ENTRY CARD</small>
           </div>
         </section>
 
         <div class="workspace">
           <section class="panel editor-panel" aria-labelledby="editor-title">
             <div class="panel-heading">
-              <div><p class="section-kicker">01 / ENTRY FORM</p><h2 id="editor-title">願いをセット</h2></div>
-              <span class="live-badge"><span></span> ID CORE READY</span>
+              <div>
+                <p class="section-kicker">ENTRY</p>
+                <h2 id="editor-title">願いを書く</h2>
+              </div>
             </div>
 
             <div class="editor-form">
               <fieldset class="control-group">
-                <legend>DESIRE / メインテキスト</legend>
-                <label class="field-label" for="mainText">カードに書き込みたい願い</label>
+                <legend><b>01</b> DESIRE</legend>
+                <label class="field-label" for="mainText">叶えたい理想の世界</label>
                 <textarea id="mainText" rows="3" maxlength="120" placeholder="例：世界が平和になりますように"></textarea>
-                <div class="field-meta"><span>改行にも対応しています</span><span id="mainTextCount">0 / 120</span></div>
+                <div class="field-meta"><span>改行できます</span><span id="mainTextCount">0 / 120</span></div>
                 <div class="preset-area">
-                  <span class="field-label">サンプルから試す</span>
-                  <div class="preset-list" aria-label="サンプルテキスト">
-                    <button class="preset-button" type="button" data-preset="世界が平和になりますように">平和への願い</button>
-                    <button class="preset-button" type="button" data-preset="毎日を楽しく過ごせますように">毎日の願い</button>
-                    <button class="preset-button" type="button" data-preset="推しに想いが届きますように">推しへの願い</button>
+                  <span class="field-label">願いの例</span>
+                  <div class="preset-list" role="group" aria-label="願いの入力例">
+                    <button class="preset-button" type="button" data-preset="世界が平和になりますように">世界平和</button>
+                    <button class="preset-button" type="button" data-preset="大切な人が幸せに暮らせますように">大切な人の幸せ</button>
+                    <button class="preset-button" type="button" data-preset="誰もが自分らしく生きられる世界になりますように">自分らしく生きる</button>
                   </div>
                 </div>
               </fieldset>
 
               <fieldset class="control-group">
-                <legend>PARAMETER / テキストの調整</legend>
-                <div class="control-grid control-grid--two">
-                  <div><label class="field-label" for="mainFontSize">フォントサイズ</label><div class="input-with-unit"><input id="mainFontSize" type="number" min="12" max="160" value="40" inputmode="numeric" /><span>px</span></div></div>
-                  <div><label class="field-label" for="mainMaxWidth">最大幅</label><div class="input-with-unit"><input id="mainMaxWidth" type="number" min="100" max="1400" value="600" inputmode="numeric" /><span>px</span></div></div>
-                </div>
-                <div class="control-grid control-grid--two offset-fields">
-                  <div><label class="field-label" for="mainOffsetX">横位置</label><div class="input-with-unit"><input id="mainOffsetX" type="number" min="-800" max="800" value="0" inputmode="numeric" /><span>px</span></div></div>
-                  <div><label class="field-label" for="mainOffsetY">縦位置</label><div class="input-with-unit"><input id="mainOffsetY" type="number" min="-600" max="600" value="0" inputmode="numeric" /><span>px</span></div></div>
-                </div>
+                <legend><b>02</b> SIGN</legend>
+                <label class="field-label" for="nameText">名前・サイン（任意）</label>
+                <input id="nameText" type="text" maxlength="40" placeholder="名前を入力">
               </fieldset>
 
-              <fieldset class="control-group">
-                <legend>PLAYER ID / 名前・サイン</legend>
-                <label class="field-label" for="nameText">名前やサイン（任意）</label>
-                <input id="nameText" type="text" maxlength="40" placeholder="例：あなたの名前" />
-                <div class="control-grid control-grid--three offset-fields">
-                  <div><label class="field-label" for="nameFontSize">サイズ</label><div class="input-with-unit"><input id="nameFontSize" type="number" min="12" max="100" value="30" inputmode="numeric" /><span>px</span></div></div>
-                  <div><label class="field-label" for="nameOffsetX">横位置</label><div class="input-with-unit"><input id="nameOffsetX" type="number" min="-400" max="400" value="10" inputmode="numeric" /><span>px</span></div></div>
-                  <div><label class="field-label" for="nameOffsetY">縦位置</label><div class="input-with-unit"><input id="nameOffsetY" type="number" min="-300" max="300" value="10" inputmode="numeric" /><span>px</span></div></div>
+              <details class="advanced-controls">
+                <summary>
+                  <span>文字のサイズ・位置を調整</span>
+                </summary>
+                <div class="advanced-body">
+                  <p class="advanced-label">願いの文字</p>
+                  <div class="control-grid control-grid--two">
+                    <div><label class="field-label" for="mainFontSize">サイズ</label><div class="input-with-unit"><input id="mainFontSize" type="number" min="12" max="160" value="40" inputmode="numeric"><span>px</span></div></div>
+                    <div><label class="field-label" for="mainMaxWidth">最大幅</label><div class="input-with-unit"><input id="mainMaxWidth" type="number" min="100" max="1400" value="600" inputmode="numeric"><span>px</span></div></div>
+                    <div><label class="field-label" for="mainOffsetX">横位置</label><div class="input-with-unit"><input id="mainOffsetX" type="number" min="-800" max="800" value="0" inputmode="numeric"><span>px</span></div></div>
+                    <div><label class="field-label" for="mainOffsetY">縦位置</label><div class="input-with-unit"><input id="mainOffsetY" type="number" min="-600" max="600" value="0" inputmode="numeric"><span>px</span></div></div>
+                  </div>
+                  <p class="advanced-label">サイン</p>
+                  <div class="control-grid control-grid--three">
+                    <div><label class="field-label" for="nameFontSize">サイズ</label><div class="input-with-unit"><input id="nameFontSize" type="number" min="12" max="100" value="30" inputmode="numeric"><span>px</span></div></div>
+                    <div><label class="field-label" for="nameOffsetX">横位置</label><div class="input-with-unit"><input id="nameOffsetX" type="number" min="-400" max="400" value="10" inputmode="numeric"><span>px</span></div></div>
+                    <div><label class="field-label" for="nameOffsetY">縦位置</label><div class="input-with-unit"><input id="nameOffsetY" type="number" min="-300" max="300" value="10" inputmode="numeric"><span>px</span></div></div>
+                  </div>
                 </div>
-              </fieldset>
+              </details>
 
-              <fieldset class="control-group options-group">
-                <legend>FINAL CHECK / 仕上げ</legend>
-                <label class="check-card" for="overlayCheckbox">
-                  <span class="check-icon" aria-hidden="true">✓</span>
-                  <span class="check-copy"><strong>Doneのハンコを押す</strong><small>完成したカードに赤いスタンプを重ねます</small></span>
-                  <input id="overlayCheckbox" type="checkbox" />
+              <fieldset class="control-group finish-group">
+                <legend><b>03</b> FINISH</legend>
+                <label class="check-card">
+                  <span class="check-copy"><strong>DONEスタンプ</strong><small>カード中央に赤いスタンプを重ねる</small></span>
+                  <input id="overlayCheckbox" type="checkbox">
                 </label>
               </fieldset>
 
               <div class="editor-actions">
-                <button class="button button--primary" id="saveBtn" type="button" disabled><span aria-hidden="true">↓</span>PNGで保存</button>
+                <button class="button button--primary" id="saveBtn" type="button" disabled>PNGを書き出す<span aria-hidden="true">→</span></button>
                 <button class="button button--ghost" id="resetBtn" type="button">リセット</button>
               </div>
-              <p class="action-note" id="assetStatus" role="status">画像を読み込んでいます…</p>
+              <p class="action-note" id="assetStatus" role="status">カードを読み込んでいます…</p>
             </div>
           </section>
 
           <section class="panel preview-panel" aria-labelledby="preview-title">
             <div class="panel-heading preview-heading">
-              <div><p class="section-kicker">02 / GAME SCREEN</p><h2 id="preview-title">完成イメージ</h2></div>
-              <span class="preview-size">STAGE 01 · 1600 × 1200</span>
+              <div>
+                <p class="section-kicker">PREVIEW</p>
+                <h2 id="preview-title">デザイアカード</h2>
+              </div>
+              <span class="preview-size">1600 × 1100</span>
             </div>
-            <div class="canvas-frame"><span class="frame-tag frame-tag--top">LIVE FEED / 01</span><canvas id="canvas" aria-label="デザイアカードのプレビュー"></canvas><div class="canvas-loading" id="canvasLoading">プレビューを準備中…</div><span class="frame-tag frame-tag--bottom">ID CORE DATA STREAM</span></div>
-            <p class="preview-hint"><span aria-hidden="true">◆</span> 入力内容はリアルタイムで反映されます</p>
+            <div class="canvas-frame">
+              <canvas id="canvas" role="img" aria-label="デザイアカードのプレビュー">デザイアカードのプレビュー</canvas>
+              <div class="canvas-loading" id="canvasLoading">プレビューを準備中…</div>
+            </div>
+            <p class="preview-hint"><span aria-hidden="true"></span>入力内容はリアルタイムで反映されます</p>
           </section>
         </div>
       </main>
 
       <footer class="site-footer">
         <div><span class="footer-label">SPECIAL THANKS</span><span>素材提供：</span> <a href="https://x.com/The_Fool_8319" target="_blank" rel="noopener noreferrer">サンジェルマン</a><span> / </span><a href="https://x.com/_gaL_hikigaeru" target="_blank" rel="noopener noreferrer">・紅aL</a></div>
-        <div class="footer-legal">FAN-MADE UI / NOT OFFICIAL</div>
-        <span class="footer-credit">WISH TERMINAL</span>
+        <p>FAN-MADE / NOT OFFICIAL</p>
       </footer>
     </div>
   </body>
