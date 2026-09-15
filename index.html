@@ -13,9 +13,9 @@
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="デザイアカードジェネレーター｜仮面ライダーギーツ">
     <meta name="twitter:description" content="叶えたい理想の世界をデザイアカードに記入してください。サインやDONEスタンプを入れて、PNG画像で保存できます。">
-    <link rel="stylesheet" href="./styles.css?v=7">
+    <link rel="stylesheet" href="./styles.css?v=8">
     <script src="./archive.js?v=1" defer></script>
-    <script src="./script.js?v=7" defer></script>
+    <script src="./script.js?v=8" defer></script>
   </head>
   <body>
     <div class="page-shell">
@@ -107,7 +107,8 @@
                 <button class="button button--primary" id="saveBtn" type="button" disabled>表面＋裏面を書き出す<span aria-hidden="true">→</span></button>
                 <button class="button button--ghost" id="resetBtn" type="button">リセット</button>
               </div>
-              <p class="action-note">表面・裏面のPNG画像2枚をZIPで保存します。</p>
+              <p class="action-note">カードコネクト用：表面・裏面とも2072×1328pxのPNGをZIPで保存します。</p>
+              <p class="action-note">ZIPを展開し、<a href="https://p.eagate.573.jp/game/card_connect/2/original/cc/howto.html" target="_blank" rel="noopener noreferrer">カードコネクトのPROアップロード</a>で表面・裏面を指定してください。</p>
               <p class="action-note" id="assetStatus" role="status">カードを読み込んでいます…</p>
             </div>
           </section>
@@ -118,13 +119,14 @@
                 <p class="section-kicker">PREVIEW</p>
                 <h2 id="preview-title">デザイアカード</h2>
               </div>
-              <span class="preview-size">1600 × 1100</span>
+              <span class="preview-size">2072 × 1328</span>
             </div>
             <div class="canvas-frame">
               <canvas id="canvas" role="img" aria-label="デザイアカードのプレビュー">デザイアカードのプレビュー</canvas>
               <div class="canvas-loading" id="canvasLoading">プレビューを準備中…</div>
             </div>
             <p class="preview-hint"><span aria-hidden="true"></span>入力内容はリアルタイムで反映されます</p>
+            <p class="action-note">横向き・透過なし／余白を追加せず、絵柄を画像の端まで配置します。プレビューは書き出し画像と同じ配置です。</p>
           </section>
         </div>
         <section class="downloads-section" aria-labelledby="downloads-title">
@@ -136,9 +138,10 @@
           </div>
           <ul class="download-list">
             <li class="download-card">
-              <img src="./desire-back.png" alt="" loading="lazy" decoding="async">
+              <img src="./desire-back-cardconnect.png" alt="" loading="lazy" decoding="async">
               <h3>デザイアカード（裏面）</h3>
-              <a id="saveBackLink" class="button button--ghost download-link" href="./desire-back.png" download="desire-back.png" aria-label="デザイアカード（裏面）をPNGで保存">PNGで保存<span aria-hidden="true">↓</span></a>
+              <p class="action-note">カードコネクト用・2072×1328px</p>
+              <a id="saveBackLink" class="button button--ghost download-link" href="./desire-back-cardconnect.png" download="desire-back.png" aria-label="デザイアカード（裏面）をPNGで保存">PNGで保存<span aria-hidden="true">↓</span></a>
             </li>
           </ul>
           <p class="action-note" id="downloadStatus" role="status"></p>

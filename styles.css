@@ -263,12 +263,12 @@ a:focus-visible {
   display: grid;
   width: 100%;
   max-width: 328px;
-  aspect-ratio: 16 / 11;
+  aspect-ratio: 2072 / 1328;
   align-content: center;
   justify-items: center;
   justify-self: end;
   color: var(--paper-ink);
-  background: var(--paper) url("./desire.png") center / cover no-repeat;
+  background: var(--paper) url("./desire-cardconnect.png") center / cover no-repeat;
   box-shadow: 13px 13px 0 var(--red);
   transform: rotate(2.2deg);
 }
@@ -690,9 +690,8 @@ canvas {
 .download-card img {
   display: block;
   width: 100%;
-  aspect-ratio: 16 / 11;
-  object-fit: contain;
-  background: #fff;
+  aspect-ratio: 2072 / 1328;
+  object-fit: cover;
 }
 
 .download-card h3 {
