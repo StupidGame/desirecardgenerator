@@ -6,7 +6,6 @@ const ctx = designCanvas.getContext("2d", { alpha: false, colorSpace: "srgb" });
 const canvasFrame = document.querySelector(".canvas-frame");
 const canvasLoading = document.getElementById("canvasLoading");
 
-// KONAMI PRO upload, landscape: https://p.eagate.573.jp/game/card_connect/2/original/cc/template.html
 const CARD_CONNECT = Object.freeze({ width: 2072, height: 1328, maxBytes: 4_000_000 });
 
 function fitForCardConnect(source, target = document.createElement("canvas")) {
@@ -20,7 +19,6 @@ function fitForCardConnect(source, target = document.createElement("canvas")) {
 
   const width = source.naturalWidth || source.width;
   const height = source.naturalHeight || source.height;
-  // Cover the full canvas without stretching or adding borders. The generated
   // Cover the full canvas without stretching or adding borders.
   const scale = Math.max(target.width / width, target.height / height);
   const fittedWidth = width * scale;
@@ -195,7 +193,7 @@ class ImageSizeError extends Error {}
 function canvasToPng(sourceCanvas) {
   return new Promise((resolve, reject) => {
     sourceCanvas.toBlob((blob) => {
-      if (blob && blob.size > CARD_CONNECT.maxBytes) reject(new ImageSizeError("画像がカードコネクトの上限4MBを超えています。文字量を減らして再度お試しください。"));
+      if (blob && blob.size > CARD_CONNECT.maxBytes) reject(new ImageSizeError("画像の上限4MBを超えています。文字量を減らして再度お試しください。"));
       else if (blob) resolve(blob);
       else reject(new Error("PNG画像を作成できませんでした"));
     }, "image/png");
