@@ -162,19 +162,78 @@ function resetForm() {
   draw();
 }
 
-function saveImage() {
-  if (refs.saveBtn.disabled) return;
-  canvas.toBlob((blob) => {
-    if (!blob) return;
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.download = "desire-card.png";
-    link.href = url;
-    link.click();
-    URL.revokeObjectURL(url);
-    refs.assetStatus.textContent = "PNGを保存しました";
-  }, "image/png");
+function canvasToPng(sourceCanvas) {
+  return new Promise((resolve, reject) => {
+    sourceCanvas.toBlob((blob) => {
+      if (blob) resolve(blob);
+      else reject(new Error("PNG画像を作成できませんでした"));
+    }, "image/png");
+  });
 }
+
+async function getBackPng() {
+  const response = await fetch("./desire-back.png");
+  if (!response.ok) throw new Error("裏面画像を読み込めませんでした");
+  // The supplied .png file contains JPEG data; export genuine PNG bytes.
+  const bitmap = await createImageBitmap(await response.blob());
+  try {
+    const backCanvas = document.createElement("canvas");
+    backCanvas.width = bitmap.width;
+    backCanvas.height = bitmap.height;
+    backCanvas.getContext("2d").drawImage(bitmap, 0, 0);
+    return await canvasToPng(backCanvas);
+  } finally {
+    bitmap.close();
+  }
+}
+
+function downloadBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.download = filename;
+  link.href = url;
+  document.body.append(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 60000);
+}
+
+async function saveImage() {
+  if (refs.saveBtn.disabled) return;
+  refs.saveBtn.disabled = true;
+  refs.assetStatus.textContent = "表面と裏面をまとめています…";
+
+  try {
+    const [frontImage, backImage] = await Promise.all([canvasToPng(canvas), getBackPng()]);
+    const archive = await createImageArchive([
+      { name: "desire-card.png", blob: frontImage },
+      { name: "desire-back.png", blob: backImage },
+    ]);
+    downloadBlob(archive, "desire-card-set.zip");
+    refs.assetStatus.textContent = "表面＋裏面のZIPのダウンロードを開始しました";
+  } catch {
+    refs.assetStatus.textContent = "書き出せませんでした。通信状況を確認して、もう一度お試しください。";
+  } finally {
+    refs.saveBtn.disabled = false;
+  }
+}
+
+document.getElementById("saveBackLink").addEventListener("click", async (event) => {
+  event.preventDefault();
+  const link = event.currentTarget;
+  if (link.getAttribute("aria-busy") === "true") return;
+  const status = document.getElementById("downloadStatus");
+  link.setAttribute("aria-busy", "true");
+  status.textContent = "裏面のPNGを準備しています…";
+  try {
+    downloadBlob(await getBackPng(), "desire-back.png");
+    status.textContent = "裏面のダウンロードを開始しました";
+  } catch {
+    status.textContent = "裏面を保存できませんでした。通信状況を確認して、もう一度お試しください。";
+  } finally {
+    link.removeAttribute("aria-busy");
+  }
+});
 
 [
   refs.mainText, refs.mainFontSize, refs.mainMaxWidth, refs.mainOffsetX, refs.mainOffsetY,
