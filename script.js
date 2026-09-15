@@ -1,11 +1,35 @@
 const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
+// Retain the existing 1600px-wide editing coordinates while rendering at
+// print resolution. Both faces use the same edge-to-edge print layout.
+const designCanvas = document.createElement("canvas");
+const ctx = designCanvas.getContext("2d", { alpha: false, colorSpace: "srgb" });
 const canvasFrame = document.querySelector(".canvas-frame");
 const canvasLoading = document.getElementById("canvasLoading");
 
+const CARD_CONNECT = Object.freeze({ width: 2072, height: 1328, maxBytes: 4_000_000 });
+
+function fitForCardConnect(source, target = document.createElement("canvas")) {
+  target.width = CARD_CONNECT.width;
+  target.height = CARD_CONNECT.height;
+  const printCtx = target.getContext("2d", { alpha: false, colorSpace: "srgb" });
+  printCtx.fillStyle = "#fff";
+  printCtx.fillRect(0, 0, target.width, target.height);
+  printCtx.imageSmoothingEnabled = true;
+  printCtx.imageSmoothingQuality = "high";
+
+  const width = source.naturalWidth || source.width;
+  const height = source.naturalHeight || source.height;
+  // Cover the full canvas without stretching or adding borders.
+  const scale = Math.max(target.width / width, target.height / height);
+  const fittedWidth = width * scale;
+  const fittedHeight = height * scale;
+  printCtx.drawImage(source, (target.width - fittedWidth) / 2, (target.height - fittedHeight) / 2, fittedWidth, fittedHeight);
+  return target;
+}
+
 const bgImage = new Image();
 const overlayImage = new Image();
-bgImage.src = "./desire.png";
+bgImage.src = "./desire-cardconnect.png";
 overlayImage.src = "./done.png";
 
 const refs = {
@@ -95,13 +119,14 @@ function measureTextBlock(text, maxWidth, fontSize) {
 function draw() {
   if (!bgImage.complete || !bgImage.naturalWidth) return;
 
-  canvas.width = bgImage.naturalWidth;
-  canvas.height = bgImage.naturalHeight;
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.drawImage(bgImage, 0, 0);
+  fitForCardConnect(bgImage, designCanvas);
+  const designWidth = 1600;
+  const designScale = designCanvas.width / designWidth;
+  const designHeight = designCanvas.height / designScale;
+  ctx.setTransform(designScale, 0, 0, designScale, 0, 0);
 
   const mainFontSize = clamp(getNumber(refs.mainFontSize, defaults.mainFontSize), 12, 160);
-  const mainMaxWidth = clamp(getNumber(refs.mainMaxWidth, defaults.mainMaxWidth), 100, canvas.width);
+  const mainMaxWidth = clamp(getNumber(refs.mainMaxWidth, defaults.mainMaxWidth), 100, designWidth);
   const mainOffsetX = getNumber(refs.mainOffsetX, defaults.mainOffsetX);
   const mainOffsetY = getNumber(refs.mainOffsetY, defaults.mainOffsetY);
   const mainText = refs.mainText.value;
@@ -130,8 +155,8 @@ function draw() {
   const minY = Math.min(...boxes.map((box) => box.y));
   const maxX = Math.max(...boxes.map((box) => box.x + box.width));
   const maxY = Math.max(...boxes.map((box) => box.y + box.height));
-  const centerOffsetX = (canvas.width - (maxX - minX)) / 2 - minX;
-  const centerOffsetY = (canvas.height - (maxY - minY)) / 2 - minY;
+  const centerOffsetX = (designWidth - (maxX - minX)) / 2 - minX;
+  const centerOffsetY = (designHeight - (maxY - minY)) / 2 - minY;
 
   ctx.font = `${mainFontSize}px "KaizouNextUPB", sans-serif`;
   let currentY = mainBox.y + centerOffsetY;
@@ -149,8 +174,9 @@ function draw() {
     const overlayScale = 0.6;
     const scaledWidth = overlayImage.naturalWidth * overlayScale;
     const scaledHeight = overlayImage.naturalHeight * overlayScale;
-    ctx.drawImage(overlayImage, (canvas.width - scaledWidth) / 2, (canvas.height - scaledHeight) / 2, scaledWidth, scaledHeight);
+    ctx.drawImage(overlayImage, (designWidth - scaledWidth) / 2, (designHeight - scaledHeight) / 2, scaledWidth, scaledHeight);
   }
+  fitForCardConnect(designCanvas, canvas);
 }
 
 function resetForm() {
@@ -162,26 +188,25 @@ function resetForm() {
   draw();
 }
 
+class ImageSizeError extends Error {}
+
 function canvasToPng(sourceCanvas) {
   return new Promise((resolve, reject) => {
     sourceCanvas.toBlob((blob) => {
-      if (blob) resolve(blob);
+      if (blob && blob.size > CARD_CONNECT.maxBytes) reject(new ImageSizeError("画像の上限4MBを超えています。文字量を減らして再度お試しください。"));
+      else if (blob) resolve(blob);
       else reject(new Error("PNG画像を作成できませんでした"));
     }, "image/png");
   });
 }
 
 async function getBackPng() {
-  const response = await fetch("./desire-back.png");
+  const response = await fetch("./desire-back-cardconnect.png");
   if (!response.ok) throw new Error("裏面画像を読み込めませんでした");
-  // The supplied .png file contains JPEG data; export genuine PNG bytes.
+  // Use exactly the same dimensions and opaque PNG encoding as the front.
   const bitmap = await createImageBitmap(await response.blob());
   try {
-    const backCanvas = document.createElement("canvas");
-    backCanvas.width = bitmap.width;
-    backCanvas.height = bitmap.height;
-    backCanvas.getContext("2d").drawImage(bitmap, 0, 0);
-    return await canvasToPng(backCanvas);
+    return await canvasToPng(fitForCardConnect(bitmap));
   } finally {
     bitmap.close();
   }
@@ -211,8 +236,8 @@ async function saveImage() {
     ]);
     downloadBlob(archive, "desire-card-set.zip");
     refs.assetStatus.textContent = "表面＋裏面のZIPのダウンロードを開始しました";
-  } catch {
-    refs.assetStatus.textContent = "書き出せませんでした。通信状況を確認して、もう一度お試しください。";
+  } catch (error) {
+    refs.assetStatus.textContent = error instanceof ImageSizeError ? error.message : "書き出せませんでした。通信状況を確認して、もう一度お試しください。";
   } finally {
     refs.saveBtn.disabled = false;
   }
@@ -228,8 +253,8 @@ document.getElementById("saveBackLink").addEventListener("click", async (event) 
   try {
     downloadBlob(await getBackPng(), "desire-back.png");
     status.textContent = "裏面のダウンロードを開始しました";
-  } catch {
-    status.textContent = "裏面を保存できませんでした。通信状況を確認して、もう一度お試しください。";
+  } catch (error) {
+    status.textContent = error instanceof ImageSizeError ? error.message : "裏面を保存できませんでした。通信状況を確認して、もう一度お試しください。";
   } finally {
     link.removeAttribute("aria-busy");
   }
